@@ -66,7 +66,11 @@ class HomeController extends GetxController {
         FlutterBluetoothSerial.instance.startDiscovery().listen((event) {
       if (event.device.name!.contains('SR01')) {
         _pebble1 = event.device;
-
+        BluetoothConnection.toAddress(_pebble1!.address).then((value) {
+          print('connection1-----${value.isConnected}');
+          discovering.value = false;
+          sendData();
+        });
         print('pebble1---${_pebble1!.address}');
         FlutterBluetoothSerial.instance.cancelDiscovery();
         index = 1;
@@ -82,10 +86,9 @@ class HomeController extends GetxController {
       //   return;
       // }
     });
-    print('-----');
+
     _streamSubscription!.onDone(() {
       print('discovering done');
-      discovering.value = false;
     });
     // FlutterBluetoothSerial.instance.setPairingRequestHandler((request) => )
     BluetoothConnection.toAddress(_pebble1!.address).then((value) {
