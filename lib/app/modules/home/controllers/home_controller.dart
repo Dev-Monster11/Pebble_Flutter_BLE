@@ -61,12 +61,12 @@ class HomeController extends GetxController {
     _streamSubscription =
         FlutterBluetoothSerial.instance.startDiscovery().listen((event) {
       if (event.device.name!.contains('SR01')) {
-        Get.snackbar('Hi', 'Pebble 1 Found');
         _pebble1 = event.device;
+        Get.snackbar('Pebble1', _pebble1!.address);
         index = 1;
       }
       if (event.device.name!.contains('SR02')) {
-        Get.snackbar('Hi', 'Pebble 2 Found');
+        Get.snackbar('Pebble2', _pebble2!.address);
         _pebble2 = event.device;
         index = index | 2;
       }
@@ -100,27 +100,29 @@ class HomeController extends GetxController {
     if (index & 1 == 1) {
       Get.snackbar('Pebble1', 'Pebble1 Started');
       connection1!.output
-          .add(Uint8List.fromList(utf8.encode("COM 090002550003000")));
+          .add(Uint8List.fromList(utf8.encode("COM 090002550003000\r\n")));
       await connection1!.output.allSent;
 
       Get.snackbar('Pebble1', 'COM command sent');
-      connection1!.output.add(Uint8List.fromList(utf8.encode("DEL 05000")));
+      connection1!.output.add(Uint8List.fromList(utf8.encode("DEL 05000\r\n")));
       await connection1!.output.allSent;
       Get.snackbar('Pebble1', 'DEL command sent');
-      connection1!.output.add(Uint8List.fromList(utf8.encode("WRD pebble1_")));
+      connection1!.output
+          .add(Uint8List.fromList(utf8.encode("WRD pebble1_\r\n")));
       await connection1!.output.allSent;
       Get.snackbar('Pebble1', 'WRD command sent');
     }
     if (index & 2 == 2) {
-      Get.snackbar('Pebble2', 'Pebble1 Started');
+      Get.snackbar('Pebble2', 'Pebble2 Started');
       connection2!.output
-          .add(Uint8List.fromList(utf8.encode("COM 090002550003000")));
+          .add(Uint8List.fromList(utf8.encode("COM 090002550003000\r\n")));
       await connection2!.output.allSent;
       Get.snackbar('Pebble2', 'COM command sent');
-      connection2!.output.add(Uint8List.fromList(utf8.encode("DEL 05000")));
+      connection2!.output.add(Uint8List.fromList(utf8.encode("DEL 05000\r\n")));
       await connection2!.output.allSent;
       Get.snackbar('Pebble2', 'DEL command sent');
-      connection2!.output.add(Uint8List.fromList(utf8.encode("WRD pebble2_")));
+      connection2!.output
+          .add(Uint8List.fromList(utf8.encode("WRD pebble2_\r\n")));
       await connection2!.output.allSent;
       Get.snackbar('Pebble2', 'WRD command sent');
     }
