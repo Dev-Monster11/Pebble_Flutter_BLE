@@ -60,11 +60,11 @@ class HomeController extends GetxController {
 
     _streamSubscription =
         FlutterBluetoothSerial.instance.startDiscovery().listen((event) {
-      if (event.device.name!.contains('SR1')) {
+      if (event.device.name!.contains('SR01')) {
         Get.snackbar('Hi', 'Pebble 1 Found');
         _pebble1 = event.device;
       }
-      if (event.device.name!.contains('SR2')) {
+      if (event.device.name!.contains('SR02')) {
         Get.snackbar('Hi', 'Pebble 2 Found');
         _pebble2 = event.device;
       }
