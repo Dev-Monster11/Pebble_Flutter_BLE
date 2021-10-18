@@ -9,13 +9,12 @@ class HomeView extends GetView<HomeController> {
     if (controller.discovering.value) {
       return CircularProgressIndicator();
     } else {
-      return ElevatedButton(
-          onPressed: _sendData, child: Text("Send"));
+      return ElevatedButton(onPressed: _sendData, child: Text("Send"));
     }
   }
 
-  void _sendData(){
-    await controller._sendData();
+  void _sendData() {
+    controller.sendData();
   }
 
   @override

@@ -90,7 +90,7 @@ class HomeController extends GetxController {
     Get.snackbar('SR2', data.toString());
   }
 
-  static void _sendData() async {
+  void sendData() async {
     connection1!.output.add(Uint8List.fromList(
         utf8.encode("COM 090002550003000DEL 05000WRD pebble1_")));
     await connection1!.output.allSent;
