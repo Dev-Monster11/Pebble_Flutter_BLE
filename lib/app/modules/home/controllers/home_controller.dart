@@ -15,7 +15,7 @@ class HomeController extends GetxController {
   static BluetoothConnection? _connection2;
   static BluetoothDevice? _pebble1;
   static BluetoothDevice? _pebble2;
-
+  int index = 0;
   static BluetoothConnection? get connection1 => HomeController._connection1;
   static BluetoothConnection? get connection2 => HomeController._connection2;
 
@@ -63,10 +63,16 @@ class HomeController extends GetxController {
       if (event.device.name!.contains('SR01')) {
         Get.snackbar('Hi', 'Pebble 1 Found');
         _pebble1 = event.device;
+        index = 1;
       }
       if (event.device.name!.contains('SR02')) {
         Get.snackbar('Hi', 'Pebble 2 Found');
         _pebble2 = event.device;
+        index = 2;
+      }
+      if (index == 2) {
+        FlutterBluetoothSerial.instance.cancelDiscovery();
+        Get.snackbar("Hi", 'All pebbles are found');
       }
     });
 
@@ -91,11 +97,21 @@ class HomeController extends GetxController {
   }
 
   void sendData() async {
-    connection1!.output.add(Uint8List.fromList(
-        utf8.encode("COM 090002550003000DEL 05000WRD pebble1_")));
+    connection1!.output
+        .add(Uint8List.fromList(utf8.encode("COM 090002550003000")));
     await connection1!.output.allSent;
+    connection1!.output.add(Uint8List.fromList(utf8.encode("DEL 05000")));
+    await connection1!.output.allSent;
+    connection1!.output.add(Uint8List.fromList(utf8.encode("WRD pebble1_")));
+    await connection1!.output.allSent;
+
     connection2!.output.add(Uint8List.fromList(
         utf8.encode("COM 090002550003000DEL 05000WRD pebble2_")));
+    await connection2!.output.allSent;
+
+    connection2!.output.add(Uint8List.fromList(utf8.encode("DEL 05000")));
+    await connection2!.output.allSent;
+    connection2!.output.add(Uint8List.fromList(utf8.encode("WRD pebble2_")));
     await connection2!.output.allSent;
   }
 
