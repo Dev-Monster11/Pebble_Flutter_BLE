@@ -6,16 +6,14 @@ import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   Widget mainContent() {
-    if (controller.discovering.value) {
+    if (controller.isScanning.value < 2) {
       return CircularProgressIndicator();
     } else {
       return ElevatedButton(onPressed: _sendData, child: Text("Send"));
     }
   }
 
-  void _sendData() {
-    controller.sendData();
-  }
+  void _sendData() {}
 
   @override
   Widget build(BuildContext context) {
