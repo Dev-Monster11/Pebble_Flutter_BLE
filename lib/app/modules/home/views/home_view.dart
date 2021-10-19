@@ -5,15 +5,19 @@ import 'package:get/get.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
-  Widget mainContent() {
-    if (controller.isScanning.value < 2) {
-      return CircularProgressIndicator();
-    } else {
-      return ElevatedButton(onPressed: _sendData, child: Text("Send"));
-    }
+  void _sendData() {
+    int a = await controller.startAction();
+    print('return value   $a');
   }
 
-  void _sendData() {}
+  Widget loadingIndicator(){
+
+    if (controller.isScanning.value < 2){
+      return CircularProgressIndicator();
+    }else{
+      return Text('Finished');
+    } 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +26,16 @@ class HomeView extends GetView<HomeController> {
         title: Text('HomeView'),
         centerTitle: true,
       ),
-      body: Obx(mainContent),
+      body: Column(
+        children: [
+      Center(
+          child: ElevatedButton(onPressed: _sendData, child: Text("Send"))
+          
+        ),
+        Center(
+          child: Obx(loadingIndicator)
+        )
+        ])
     );
   }
 }

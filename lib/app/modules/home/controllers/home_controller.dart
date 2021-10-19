@@ -10,9 +10,9 @@ class HomeController extends GetxController {
   FlutterBlue flutterBlue = FlutterBlue.instance;
   BluetoothDevice? pebble1;
   BluetoothDevice? pebble2;
-  @override
-  void onInit() async {
-    super.onInit();
+
+  Future<int> startAction() async {
+    isScanning.value = 1;
     flutterBlue.startScan(timeout: Duration(seconds: 4));
     var subscription = flutterBlue.scanResults.listen((results) {
       for (ScanResult r in results) {
@@ -29,11 +29,17 @@ class HomeController extends GetxController {
     });
     flutterBlue.stopScan();
     bool flag = await connectDevice();
-    isScanning.value = 1;
+    isScanning.value = 2;
     print('Flag -----$flag');
     flag = await discoverService();
     print('Flag -----$flag');
-    isScanning.value = 2;
+    isScanning.value = 3;
+    return isScanning.value;
+  }
+
+  @override
+  void onInit() async {
+    super.onInit();
   }
 
   Future<bool> connectDevice() async {
