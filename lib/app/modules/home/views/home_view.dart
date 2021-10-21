@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
-  void _sendData() {
+  void _sendData() async{
     int a = await controller.startAction();
     print('return value   $a');
   }
