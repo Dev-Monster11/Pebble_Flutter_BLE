@@ -94,33 +94,29 @@ class HomeController extends GetxController {
     return 0;
   }
 
-  Future<int> pebble2Found(found) async {
-    if (found) {
-      await p2!.connect();
-      print('p2 connected');
-      List<BluetoothService> aa = await p2!.discoverServices();
-      for (int i = 0; i < aa.length; i++) {
-        BluetoothService service = aa[i];
-        print('service uuid=------${service.uuid}');
-        var characteristics = service.characteristics;
+  Future<int> pebble2Found(BluetoothDevice p2) async {
+    await p2.connect();
+    print('p2 connected');
+    List<BluetoothService> aa = await p2.discoverServices();
+    for (int i = 0; i < aa.length; i++) {
+      BluetoothService service = aa[i];
+      print('service uuid=------${service.uuid}');
+      var characteristics = service.characteristics;
 
-        for (BluetoothCharacteristic c in characteristics) {
-          if (c.uuid == guid1 || c.uuid == guid2) {
-            await c.write(utf8.encode('COM 090002550003000'));
-            List<int> v = await c.read();
-            print(v);
-            await c.write(utf8.encode('DEL 05000'));
-            v = await c.read();
-            print(v);
-            await c.write(utf8.encode('WRD pebble_1'));
-            v = await c.read();
-            print(v);
-            return 1;
-          }
+      for (BluetoothCharacteristic c in characteristics) {
+        if (c.uuid == guid1 || c.uuid == guid2) {
+          await c.write(utf8.encode('COM 090002550003000'));
+          List<int> v = await c.read();
+          print(v);
+          await c.write(utf8.encode('DEL 05000'));
+          v = await c.read();
+          print(v);
+          await c.write(utf8.encode('WRD pebble_1'));
+          v = await c.read();
+          print(v);
+          return 1;
         }
       }
-    } else {
-      return 0;
     }
     return 0;
   }
@@ -128,8 +124,6 @@ class HomeController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    ever(p1Found, pebble1Found);
-    ever(p2Found, pebble2Found);
   }
 
   @override
