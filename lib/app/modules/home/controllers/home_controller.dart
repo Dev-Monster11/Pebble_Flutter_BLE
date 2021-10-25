@@ -15,12 +15,13 @@ class HomeController extends GetxController {
     p1Found.value = false;
     p2Found.value = false;
     isScanning.value = 1;
-    flutterBlue.startScan(timeout: Duration(1));
+    flutterBlue.startScan(timeout: Duration(seconds: 2));
 
     flutterBlue.scanResults.listen((event) {
       for (ScanResult r in event) {
-        if (r.device.name.length > 0)
+        if (r.device.name.isEmpty == false) {
           print('${r.device.name} found rssi: ${r.rssi}');
+        }
         if (r.device.name.startsWith('SR_01')) {
           isScanning.value++;
           p1 = r.device;
