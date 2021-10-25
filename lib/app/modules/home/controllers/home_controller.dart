@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:get/get.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -33,14 +35,15 @@ class HomeController extends GetxController {
           // });
           p1Found.value = true;
           print('${r.device.name} found rssi: ${r.rssi}');
+        } else if (r.device.name.startsWith('SR_02')) {
+          isScanning.value++;
+          p2 = r.device;
+          pebble2Found(true).then((v) {
+            print('pebble2Found--result----$v');
+          });
+          p2Found.value = true;
+          print('${r.device.name} found rssi: ${r.rssi}');
         }
-        //  else if (r.device.name.startsWith('SR_02')) {
-        //   isScanning.value++;
-        //   p2 = r.device;
-        //   p2Found.value = true;
-        //   // await p2!.connect();
-        //   print('${r.device.name} found rssi: ${r.rssi}');
-        // }
       }
     });
     // await p1!.connect();
@@ -89,11 +92,35 @@ class HomeController extends GetxController {
     return 0;
   }
 
-  void pebble2Found(found) async {
+  Future<int> pebble2Found(found) async {
     if (found) {
-      Get.snackbar('Hi', p2.toString());
       await p2!.connect();
+      print('p2 connected');
+      List<BluetoothService> aa = await p2!.discoverServices();
+      for (int i = 0; i < aa.length; i++) {
+        BluetoothService service = aa[i];
+        print('service uuid=------${service.uuid}');
+        var characteristics = service.characteristics;
+
+        for (BluetoothCharacteristic c in characteristics) {
+          if (c.uuid == guid1 || c.uuid == guid2) {
+            await c.write(utf8.encode('COM 090002550003000'));
+            List<int> v = await c.read();
+            print(v);
+            await c.write(utf8.encode('DEL 05000'));
+            v = await c.read();
+            print(v);
+            await c.write(utf8.encode('WRD pebble_1'));
+            v = await c.read();
+            print(v);
+            return 1;
+          }
+        }
+      }
+    } else {
+      return 0;
     }
+    return 0;
   }
 
   @override
