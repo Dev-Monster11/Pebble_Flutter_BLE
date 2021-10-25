@@ -7,7 +7,8 @@ class HomeController extends GetxController {
   FlutterBlue flutterBlue = FlutterBlue.instance;
   BluetoothDevice? p1;
   BluetoothDevice? p2;
-
+  Guid guid1 = Guid('00001800-0000-1000-8000-00805F9B34FB');
+  Guid guid2 = Guid('6E400001-B5A3-F393-E0A9-E50E24DCCA9E');
   var p1Found = false.obs;
   var p2Found = false.obs;
   var isScanning = 0.obs;
@@ -15,9 +16,7 @@ class HomeController extends GetxController {
     p1Found.value = false;
     p2Found.value = false;
     isScanning.value = 1;
-    flutterBlue.startScan(
-        withServices: [Guid('00001800-0000-1000-8000-00805F9B34FB')],
-        timeout: Duration(seconds: 2));
+    flutterBlue.startScan(withServices: [guid1], timeout: Duration(seconds: 2));
     // flutterBlue.startScan(timeout: Duration(seconds: 2));
 
     flutterBlue.scanResults.listen((event) {
