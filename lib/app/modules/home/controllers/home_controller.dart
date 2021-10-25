@@ -38,10 +38,9 @@ class HomeController extends GetxController {
           print('${r.device.name} found rssi: ${r.rssi}');
         } else if (r.device.name.startsWith('SR_02')) {
           print('-----pebbble2 found---');
-          isScanning.value++;
-          p2 = r.device;
-          pebble2Found(true).then((v) {
+          pebble2Found(r.device).then((v) {
             print('pebble2Found--result----$v');
+            isScanning.value = v;
           });
           p2Found.value = true;
           print('${r.device.name} found rssi: ${r.rssi}');
@@ -94,10 +93,10 @@ class HomeController extends GetxController {
     return 0;
   }
 
-  Future<int> pebble2Found(BluetoothDevice p2) async {
-    await p2.connect();
+  Future<int> pebble2Found(BluetoothDevice pebble2) async {
+    await pebble2.connect();
     print('p2 connected');
-    List<BluetoothService> aa = await p2.discoverServices();
+    List<BluetoothService> aa = await pebble2.discoverServices();
     for (int i = 0; i < aa.length; i++) {
       BluetoothService service = aa[i];
       print('service uuid=------${service.uuid}');
@@ -114,7 +113,7 @@ class HomeController extends GetxController {
           await c.write(utf8.encode('WRD pebble_1'));
           v = await c.read();
           print(v);
-          return 1;
+          return 10;
         }
       }
     }
