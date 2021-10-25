@@ -15,7 +15,10 @@ class HomeController extends GetxController {
     p1Found.value = false;
     p2Found.value = false;
     isScanning.value = 1;
-    flutterBlue.startScan(timeout: Duration(seconds: 2));
+    flutterBlue.startScan(
+        withServices: [Guid('00001800-0000-1000-8000-00805F9B34FB')],
+        timeout: Duration(seconds: 2));
+    // flutterBlue.startScan(timeout: Duration(seconds: 2));
 
     flutterBlue.scanResults.listen((event) {
       for (ScanResult r in event) {
