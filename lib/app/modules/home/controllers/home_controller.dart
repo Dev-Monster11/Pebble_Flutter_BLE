@@ -51,6 +51,7 @@ class HomeController extends GetxController {
   }
 
   void pebble1Found(found) async {
+    print('-----------pebble1Found---------\n\n');
     if (found) {
       Get.snackbar('Hi', p1.toString());
       print('Device1 Connecting-------');
@@ -60,6 +61,7 @@ class HomeController extends GetxController {
   }
 
   void pebble2Found(found) async {
+    print('-----------pebble2Found---------\n\n');
     if (found) {
       Get.snackbar('Hi', p2.toString());
       await p2!.connect();

@@ -7,7 +7,7 @@ import '../controllers/home_controller.dart';
 class HomeView extends GetView<HomeController> {
   void _sendData() async{
     int a = await controller.startAction();
-    print('return value   $a');
+    print('\n\n-------return value   $a\n\n');
   }
 
   Widget loadingIndicator(){
