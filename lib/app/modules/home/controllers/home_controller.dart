@@ -26,6 +26,7 @@ class HomeController extends GetxController {
         if (r.device.name.startsWith('SR_01')) {
           isScanning.value++;
           p1 = r.device;
+          print('-----pebbble1 found---');
           pebble1Found(true).then((v) {
             print('----pebble1 end   $v');
           });
@@ -36,6 +37,7 @@ class HomeController extends GetxController {
           p1Found.value = true;
           print('${r.device.name} found rssi: ${r.rssi}');
         } else if (r.device.name.startsWith('SR_02')) {
+          print('-----pebbble2 found---');
           isScanning.value++;
           p2 = r.device;
           pebble2Found(true).then((v) {
