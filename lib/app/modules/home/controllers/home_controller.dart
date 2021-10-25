@@ -18,7 +18,8 @@ class HomeController extends GetxController {
     p1Found.value = false;
     p2Found.value = false;
     isScanning.value = 1;
-    flutterBlue.startScan(withServices: [guid1], timeout: Duration(seconds: 2));
+    flutterBlue
+        .startScan(withServices: [guid1, guid2], timeout: Duration(seconds: 2));
     // flutterBlue.startScan(timeout: Duration(seconds: 2));
 
     flutterBlue.scanResults.listen((event) {
@@ -27,8 +28,10 @@ class HomeController extends GetxController {
           isScanning.value++;
           p1 = r.device;
           print('-----pebbble1 found---');
-          pebble1Found(true).then((v) {
+          pebble1Found(r.device).then((v) {
             print('----pebble1 end   $v');
+
+            isScanning.value = v;
           });
 
           // services.forEach((service){
@@ -65,30 +68,26 @@ class HomeController extends GetxController {
     return isScanning.value;
   }
 
-  Future<int> pebble1Found(found) async {
-    if (found) {
-      await p1!.connect();
-      print('p1 connected');
-      List<BluetoothService> aa = await p1!.discoverServices();
-      for (int i = 0; i < aa.length; i++) {
-        BluetoothService service = aa[i];
-        var characteristics = service.characteristics;
-        for (BluetoothCharacteristic c in characteristics) {
-          print('characteristics descriptor ---${c.descriptors}');
-          await c.write(utf8.encode('COM 090002550003000'));
-          List<int> v = await c.read();
-          print(v);
-          await c.write(utf8.encode('DEL 05000'));
-          v = await c.read();
-          print(v);
-          await c.write(utf8.encode('WRD pebble_1'));
-          v = await c.read();
-          print(v);
-          return 1;
-        }
+  Future<int> pebble1Found(BluetoothDevice pebble1) async {
+    await pebble1.connect();
+    print('p1 connected');
+    List<BluetoothService> aa = await pebble1.discoverServices();
+    for (int i = 0; i < aa.length; i++) {
+      BluetoothService service = aa[i];
+      var characteristics = service.characteristics;
+      for (BluetoothCharacteristic c in characteristics) {
+        print('characteristics descriptor ---${c.descriptors}');
+        await c.write(utf8.encode('COM 090002550003000'));
+        List<int> v = await c.read();
+        print(v);
+        await c.write(utf8.encode('DEL 05000'));
+        v = await c.read();
+        print(v);
+        await c.write(utf8.encode('WRD pebble_1'));
+        v = await c.read();
+        print(v);
+        return 1;
       }
-    } else {
-      return 0;
     }
     return 0;
   }
@@ -110,7 +109,7 @@ class HomeController extends GetxController {
           await c.write(utf8.encode('DEL 05000'));
           v = await c.read();
           print(v);
-          await c.write(utf8.encode('WRD pebble_1'));
+          await c.write(utf8.encode('WRD pebble_2'));
           v = await c.read();
           print(v);
           return 10;
