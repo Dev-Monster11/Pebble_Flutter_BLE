@@ -19,18 +19,28 @@ class HomeController extends GetxController {
 
     flutterBlue.scanResults.listen((event) {
       for (ScanResult r in event) {
-        if (r.device.name.isEmpty == false) {
-          print('${r.device.name} found rssi: ${r.rssi}');
-        }
+
         if (r.device.name.startsWith('SR_01')) {
           isScanning.value++;
           p1 = r.device;
+           pebble1Found(true).then((){
+             print('----pebble1 end');
+           })
+
+          // services.forEach((service){
+
+            
+          // });
           p1Found.value = true;
-        } else if (r.device.name.startsWith('SR_02')) {
-          isScanning.value++;
-          p2 = r.device;
-          p2Found.value = true;
+          print('${r.device.name} found rssi: ${r.rssi}');
         }
+        //  else if (r.device.name.startsWith('SR_02')) {
+        //   isScanning.value++;
+        //   p2 = r.device;
+        //   p2Found.value = true;
+        //   // await p2!.connect();
+        //   print('${r.device.name} found rssi: ${r.rssi}');
+        // }
       }
     });
     // await p1!.connect();
@@ -52,12 +62,25 @@ class HomeController extends GetxController {
   }
 
   void pebble1Found(found) async {
-    print('-----------pebble1Found---------\n\n');
-    if (found) {
-      Get.snackbar('Hi', p1.toString());
-      print('Device1 Connecting-------');
-      await p1!.connect();
-      print('Device1 Connected-------');
+    if (found){
+    await p1!.connect();
+    List<BluetoothService> aa = await device.discoverServices();
+    for(int i = 0; i < aa.length; i+++){
+      BluetoothService service = aa[i];
+      var characteristics = service.characteristics;
+      for(BluetoothCharacteristic c in characteristics){
+        await c.write(utf8.encode('COM 090002550003000'));
+        List<int> v = await c.read();
+        print(v);
+        await c.write(utf8.encode('DEL 05000'));
+        v = await c.read();
+        print(v);
+        await c.write(utf8.encode('WRD pebble_1'));
+        v = await c.read();
+        print(v);
+        
+      }
+    }
     }
   }
 
