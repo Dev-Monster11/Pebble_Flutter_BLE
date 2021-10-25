@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:get/get.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -18,35 +16,24 @@ class HomeController extends GetxController {
     p1Found.value = false;
     p2Found.value = false;
     isScanning.value = 1;
-    flutterBlue
-        .startScan(withServices: [guid1, guid2], timeout: Duration(seconds: 2));
+    flutterBlue.startScan(timeout: Duration(seconds: 2));
     // flutterBlue.startScan(timeout: Duration(seconds: 2));
 
     flutterBlue.scanResults.listen((event) {
       for (ScanResult r in event) {
+        print('${r.device.name} found rssi: ${r.rssi}');
         if (r.device.name.startsWith('SR_01')) {
-          isScanning.value++;
-          p1 = r.device;
           print('-----pebbble1 found---');
           pebble1Found(r.device).then((v) {
             print('----pebble1 end   $v');
-
             isScanning.value = v;
           });
-
-          // services.forEach((service){
-
-          // });
-          p1Found.value = true;
-          print('${r.device.name} found rssi: ${r.rssi}');
         } else if (r.device.name.startsWith('SR_02')) {
           print('-----pebbble2 found---');
           pebble2Found(r.device).then((v) {
             print('pebble2Found--result----$v');
             isScanning.value = v;
           });
-          p2Found.value = true;
-          print('${r.device.name} found rssi: ${r.rssi}');
         }
       }
     });
