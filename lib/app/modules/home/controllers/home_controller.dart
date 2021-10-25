@@ -83,7 +83,7 @@ class HomeController extends GetxController {
         await c.write(utf8.encode('DEL 05000'));
         v = await c.read();
         print(v);
-        await c.write(utf8.encode('WRD pebble_1'));
+        await c.write(utf8.encode('WRD pebble1_'));
         v = await c.read();
         print(v);
         return 1;
@@ -109,7 +109,7 @@ class HomeController extends GetxController {
           await c.write(utf8.encode('DEL 05000'));
           v = await c.read();
           print(v);
-          await c.write(utf8.encode('WRD pebble_2'));
+          await c.write(utf8.encode('WRD pebble2_'));
           v = await c.read();
           print(v);
           return 10;
