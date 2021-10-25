@@ -62,11 +62,13 @@ class HomeController extends GetxController {
   Future<int> pebble1Found(found) async {
     if (found) {
       await p1!.connect();
+      print('p1 connected');
       List<BluetoothService> aa = await p1!.discoverServices();
       for (int i = 0; i < aa.length; i++) {
         BluetoothService service = aa[i];
         var characteristics = service.characteristics;
         for (BluetoothCharacteristic c in characteristics) {
+          print('characteristics descriptor ---${c.descriptors}');
           await c.write(utf8.encode('COM 090002550003000'));
           List<int> v = await c.read();
           print(v);
@@ -86,7 +88,6 @@ class HomeController extends GetxController {
   }
 
   void pebble2Found(found) async {
-    print('-----------pebble2Found---------\n\n');
     if (found) {
       Get.snackbar('Hi', p2.toString());
       await p2!.connect();
