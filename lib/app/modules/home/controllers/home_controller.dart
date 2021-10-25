@@ -23,47 +23,26 @@ class HomeController extends GetxController {
       for (ScanResult r in event) {
         print('${r.device.name} found rssi: ${r.rssi}');
         if (r.device.name.startsWith('SR_01')) {
-          print('-----pebbble1 found---');
           pebble1Found(r.device).then((v) {
-            print('----pebble1 end   $v');
             isScanning.value = v;
           });
         } else if (r.device.name.startsWith('SR_02')) {
-          print('-----pebbble2 found---');
           pebble2Found(r.device).then((v) {
-            print('pebble2Found--result----$v');
             isScanning.value = v;
           });
         }
       }
     });
-    // await p1!.connect();
-    // await p2!.connect();
-    // List<BluetoothService> services = await p1!.discoverServices();
-    // for (BluetoothService service in services) {
-    //   // do something with service
-    //   var characteristics = service.characteristics;
-    //   for (BluetoothCharacteristic c in characteristics) {
-    //     await c.write(utf8.encode("COM 090002550003000\r\n"));
-    //     await c.write(utf8.encode("DEL 05000\r\n"));
-    //     await c.write(utf8.encode("WRD pebble1_\r\n"));
-    //     List<int> value = await c.read();
-    //     print('\n\nRead Value is ----\t${value}\n');
-    //   }
-    // }
-    // isScanning.value = 3;
     return isScanning.value;
   }
 
   Future<int> pebble1Found(BluetoothDevice pebble1) async {
     await pebble1.connect();
-    print('p1 connected');
     List<BluetoothService> aa = await pebble1.discoverServices();
     for (int i = 0; i < aa.length; i++) {
       BluetoothService service = aa[i];
       var characteristics = service.characteristics;
       for (BluetoothCharacteristic c in characteristics) {
-        print('characteristics descriptor ---${c.descriptors}');
         await c.write(utf8.encode('COM 090002550003000'));
         List<int> v = await c.read();
         print(v);
@@ -81,24 +60,22 @@ class HomeController extends GetxController {
 
   Future<int> pebble2Found(BluetoothDevice pebble2) async {
     await pebble2.connect();
-    print('p2 connected');
     List<BluetoothService> aa = await pebble2.discoverServices();
     for (int i = 0; i < aa.length; i++) {
       BluetoothService service = aa[i];
-      print('service uuid=------${service.uuid}');
       var characteristics = service.characteristics;
 
       for (BluetoothCharacteristic c in characteristics) {
         if (c.uuid == guid1 || c.uuid == guid2) {
           await c.write(utf8.encode('COM 090002550003000'));
           List<int> v = await c.read();
-          print(v);
+          print('read--------$v');
           await c.write(utf8.encode('DEL 05000'));
           v = await c.read();
-          print(v);
+          print('del read-------$v');
           await c.write(utf8.encode('WRD pebble2_'));
           v = await c.read();
-          print(v);
+          print('wrd read--------$v');
           return 10;
         }
       }
