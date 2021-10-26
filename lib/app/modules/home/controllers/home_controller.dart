@@ -21,12 +21,11 @@ class HomeController extends GetxController {
 
     flutterBlue.scanResults.listen((event) {
       for (ScanResult r in event) {
-        print('${r.device.name} found rssi: ${r.rssi}');
-        if (r.device.name.startsWith('SR_01')) {
+        if (r.device.name.startsWith('SR01')) {
           pebble1Found(r.device).then((v) {
             isScanning.value = v;
           });
-        } else if (r.device.name.startsWith('SR_02')) {
+        } else if (r.device.name.startsWith('SR02')) {
           pebble2Found(r.device).then((v) {
             isScanning.value = v;
           });
