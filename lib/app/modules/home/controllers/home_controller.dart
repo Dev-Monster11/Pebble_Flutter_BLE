@@ -73,6 +73,7 @@ class HomeController extends GetxController {
       for (BluetoothCharacteristic c in characteristics) {
         // if (c.uuid == 0x03) {
         print('chaaracter uuid ----${c.uuid}');
+        print('character id------${c.serviceUuid}');
         await c.write(utf8.encode('COM 090002550003000'));
         List<int> v = await c.read();
         print('read--------$v');
