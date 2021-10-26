@@ -22,13 +22,16 @@ class HomeController extends GetxController {
     flutterBlue.scanResults.listen((event) {
       for (ScanResult r in event) {
         if (r.device.name.startsWith('SR01')) {
-          pebble1Found(r.device).then((v) {
-            isScanning.value = v;
-          });
+          p1 = r.device;
+          // pebble1Found(r.device).then((v) {
+          //   isScanning.value = v;
+          // });
         } else if (r.device.name.startsWith('SR02')) {
-          pebble2Found(r.device).then((v) {
-            isScanning.value = v;
-          });
+          // pebble2Found(r.device).then((v) {
+          //   isScanning.value = v;
+          // });
+          p2 = r.device;
+          flutterBlue.stopScan();
         }
       }
     });
@@ -75,11 +78,9 @@ class HomeController extends GetxController {
           await c.write(utf8.encode('WRD pebble2_'));
           v = await c.read();
           print('wrd read--------$v');
-          return 10;
         }
       }
     }
-    return 0;
   }
 
   Future<int> pebble2Found(BluetoothDevice pebble2) async {
