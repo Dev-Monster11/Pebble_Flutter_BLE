@@ -64,6 +64,7 @@ class HomeController extends GetxController {
     await p2!.connect();
 
     List<BluetoothService> aa = await p2!.discoverServices();
+    print('length-----------${aa.length}');
     for (int i = 0; i < aa.length; i++) {
       BluetoothService service = aa[i];
       print('service uuid----${service.uuid}');
@@ -71,6 +72,7 @@ class HomeController extends GetxController {
 
       for (BluetoothCharacteristic c in characteristics) {
         // if (c.uuid == 0x03) {
+        print('chaaracter uuid ----${c.uuid}');
         await c.write(utf8.encode('COM 090002550003000'));
         List<int> v = await c.read();
         print('read--------$v');
@@ -96,7 +98,7 @@ class HomeController extends GetxController {
       var characteristics = service.characteristics;
       print('discovered characteris-------$characteristics');
       for (BluetoothCharacteristic c in characteristics) {
-        if (c.uuid == guid1 || c.uuid == guid2) {
+        if (c.uuid == guid2) {
           print('found characteristics');
           await c.write(utf8.encode('COM 090002550003000'));
           List<int> v = await c.read();
