@@ -62,9 +62,11 @@ class HomeController extends GetxController {
 
   Future<int> sendAction() async {
     await p2!.connect();
+
     List<BluetoothService> aa = await p2!.discoverServices();
     for (int i = 0; i < aa.length; i++) {
       BluetoothService service = aa[i];
+      print('service uuid----${service.uuid}');
       var characteristics = service.characteristics;
 
       for (BluetoothCharacteristic c in characteristics) {
