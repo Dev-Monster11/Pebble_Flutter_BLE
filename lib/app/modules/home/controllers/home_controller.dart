@@ -57,6 +57,31 @@ class HomeController extends GetxController {
     return 0;
   }
 
+  void _send() async {
+    await p2!.connect();
+    List<BluetoothService> aa = await p2!.discoverServices();
+    for (int i = 0; i < aa.length; i++) {
+      BluetoothService service = aa[i];
+      var characteristics = service.characteristics;
+
+      for (BluetoothCharacteristic c in characteristics) {
+        if (c.uuid == guid1 || c.uuid == guid2) {
+          await c.write(utf8.encode('COM 090002550003000'));
+          List<int> v = await c.read();
+          print('read--------$v');
+          await c.write(utf8.encode('DEL 05000'));
+          v = await c.read();
+          print('del read-------$v');
+          await c.write(utf8.encode('WRD pebble2_'));
+          v = await c.read();
+          print('wrd read--------$v');
+          return 10;
+        }
+      }
+    }
+    return 0;
+  }
+
   Future<int> pebble2Found(BluetoothDevice pebble2) async {
     await pebble2.connect();
     List<BluetoothService> aa = await pebble2.discoverServices();
