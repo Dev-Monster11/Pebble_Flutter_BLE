@@ -31,7 +31,8 @@ class HomeView extends GetView<HomeController> {
         ),
         body: Column(children: [
           Center(
-              child: ElevatedButton(onPressed: _sendData, child: Text("Send"))),
+              child:
+                  ElevatedButton(onPressed: _sendData, child: Text("Connect"))),
           Center(child: ElevatedButton(onPressed: _send, child: Text("Send"))),
           Center(child: Obx(loadingIndicator))
         ]));

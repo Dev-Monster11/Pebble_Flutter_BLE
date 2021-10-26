@@ -88,12 +88,14 @@ class HomeController extends GetxController {
   Future<int> pebble2Found(BluetoothDevice pebble2) async {
     await pebble2.connect();
     List<BluetoothService> aa = await pebble2.discoverServices();
+
     for (int i = 0; i < aa.length; i++) {
       BluetoothService service = aa[i];
       var characteristics = service.characteristics;
-
+      print('discovered characteris-------$characteristics');
       for (BluetoothCharacteristic c in characteristics) {
         if (c.uuid == guid1 || c.uuid == guid2) {
+          print('found characteristics');
           await c.write(utf8.encode('COM 090002550003000'));
           List<int> v = await c.read();
           print('read--------$v');
