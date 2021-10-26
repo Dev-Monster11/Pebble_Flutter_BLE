@@ -60,7 +60,7 @@ class HomeController extends GetxController {
     return 0;
   }
 
-  void _send() async {
+  Future<int> sendAction() async {
     await p2!.connect();
     List<BluetoothService> aa = await p2!.discoverServices();
     for (int i = 0; i < aa.length; i++) {
@@ -78,9 +78,11 @@ class HomeController extends GetxController {
           await c.write(utf8.encode('WRD pebble2_'));
           v = await c.read();
           print('wrd read--------$v');
+          return 10;
         }
       }
     }
+    return 0;
   }
 
   Future<int> pebble2Found(BluetoothDevice pebble2) async {

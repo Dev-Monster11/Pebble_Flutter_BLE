@@ -10,7 +10,8 @@ class HomeView extends GetView<HomeController> {
   }
 
   void _send() async {
-    await controller._send();
+    int a = await controller.sendAction();
+    print('send action result is -------$a');
   }
 
   Widget loadingIndicator() {
